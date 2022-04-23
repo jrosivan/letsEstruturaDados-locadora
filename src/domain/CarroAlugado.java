@@ -41,8 +41,9 @@ public class CarroAlugado {
     public String toString() {
         String s1, s2 = "";
         s1 = "\n" + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format( dataEmprestimo )  +
-         ": Carro: " + listaEspera.getCarro().getMarca() + ", " + listaEspera.getCarro().getModelo() +
-             ", " + listaEspera.getCarro().getPlaca() + ", foi EMPRESTADO por: " + listaEspera.getCliente().getNome(); 
+             ": Carro: " + listaEspera.getCarro().getMarca() + ", " + listaEspera.getCarro().getModelo() +
+             ", " + listaEspera.getCarro().getPlaca() + ", foi EMPRESTADO por: " + listaEspera.getCliente().getNome() +
+            " * na loja: " + listaEspera.getFilial().getNome();
         if(dataDevolvido != 0){
             s2 = "\n" + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(dataDevolvido) + 
             ": Carro: " + listaEspera.getCarro().getMarca() + ", " + listaEspera.getCarro().getModelo() +
@@ -50,6 +51,5 @@ public class CarroAlugado {
             } 
         return s1+s2;
     }
-        
-    
+   
 }
