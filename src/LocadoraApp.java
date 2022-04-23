@@ -3,11 +3,12 @@ import domain.CarroAlugado;
 import domain.Cliente;
 import domain.Filial;
 import domain.ListaEspera;
+import listaEncadeadaSimples.ListaEncadeada;
+import listaEncadeadaSimples.Node;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Queue;
@@ -21,7 +22,9 @@ public class LocadoraApp  {
     public static void main(String[] args)  {
 
         /* CRIAÇÃO DA EMPRESA...*/
-        List<Filial> locadora = new ArrayList<Filial>();
+        // List<Filial> locadora = new ArrayList<Filial>();
+
+        ListaEncadeada locadora = new ListaEncadeada();  // USANDO A LISTA ENCADEADA SIMPLES!
 
         Queue<ListaEspera> listaEspera = new ArrayDeque<ListaEspera>(10);
         Stack<CarroAlugado> carrosAlugados = new Stack<>(); 
@@ -51,10 +54,8 @@ public class LocadoraApp  {
         System.out.println("\n09) Listando situação atual das frotas da Empresa...");
         ListarLocadora(locadora);
 
-
         System.out.println("\n10) Valor total das diárias dos carros alugados...");
         mostrarValorDiarias(carrosAlugados);
-
 
         Pensando("\nAguardando devolução dos carros....");
         Pensando("Ainda aguardando... choveu muito!");
@@ -62,40 +63,34 @@ public class LocadoraApp  {
         System.out.println("\n11) Os carros foram todos devolvidos...\n");
 
         Pensando("12) Organizando minha frota: TRES CARROS FORAM ROUBADOS :( retirando da lista!");
-        locadora.get(0).getFrota().remove(2);
-        locadora.get(0).getFrota().remove(0);
-        locadora.get(2).getFrota().remove(1);
-
+        ((Filial)locadora.getNode(0).getElemento()).getFrota().remove(2);
+        ((Filial)locadora.getNode(0).getElemento()).getFrota().remove(0);
+        ((Filial)locadora.getNode(2).getElemento()).getFrota().remove(1);
         System.out.println("11) Listando situação atual das frotas, depois do roubo:");
         ListarLocadora(locadora);
-
-
-
 
         System.out.println("\n12) Histórico dos aluguéis:");
         mostrarHistoricoAluguel(historicoAlugados);
 
         //Listas encadeadas......DUPLA/SIMPLES/CIRCULAR: ?
-
-
-
+        // Usando a ListaSimples. alterando para OBJECT!
 
     }
 
 
     // criar a Locadora Matriz e 3 filiais...
-    public static void IniciarEmpresa(List<Filial> locadora) {
+    public static void IniciarEmpresa(ListaEncadeada locadora) {
         Filial matriz = new Filial("PANGEIA RENT A CAR");
         matriz.setMatriz(matriz);
-        locadora.add(matriz);
+        locadora.inserirInicio(matriz);
         // criando 3 filiais
-        locadora.add(new Filial("PANGEIA RENT A CAR - SAO PAULO", matriz));
-        locadora.add( new Filial("PANGEIA RENT A CAR - BRASÍLIA", matriz));
-        locadora.add( new Filial("PANGEIA RENT A CAR - RIO DE JANEIRO", matriz));
+        locadora.inserirFinal(new Filial("PANGEIA RENT A CAR - SAO PAULO", matriz));
+        locadora.inserirFinal(new Filial("PANGEIA RENT A CAR - BRASÍLIA", matriz));
+        locadora.inserirFinal(new Filial("PANGEIA RENT A CAR - RIO DE JANEIRO", matriz));
     }
 
 
-    public static void CadastrarClientes(List<Filial> locadora) {
+    public static void CadastrarClientes(ListaEncadeada locadora) {
         List<Cliente> listaClientes;
         Filial filial = PesquisarFilial(locadora, "PANGEIA RENT A CAR");
         if (filial != null){
@@ -129,7 +124,7 @@ public class LocadoraApp  {
         }
     }
 
-    public static void CadastrarFrota(List<Filial> locadora) {
+    public static void CadastrarFrota(ListaEncadeada locadora) {
         List<Carro> frota;
         Filial filial = PesquisarFilial(locadora, "PANGEIA RENT A CAR");
         if (filial != null){
@@ -163,19 +158,24 @@ public class LocadoraApp  {
         }
     }
 
-    public static void GerarListaEspera(List<Filial> locadora, Queue<ListaEspera> listaEspera) {
-        listaEspera.add(new ListaEspera(locadora.get(0), locadora.get(0).getListaClientes().get(0), locadora.get(0).getFrota().get(1)));
-        listaEspera.add(new ListaEspera(locadora.get(0), locadora.get(0).getListaClientes().get(2), locadora.get(0).getFrota().get(0)));
+    public static void GerarListaEspera(ListaEncadeada locadora, Queue<ListaEspera> listaEspera) {
 
-        listaEspera.add(new ListaEspera(locadora.get(1), locadora.get(1).getListaClientes().get(2), locadora.get(1).getFrota().get(1)));
-        listaEspera.add(new ListaEspera(locadora.get(1), locadora.get(1).getListaClientes().get(1), locadora.get(1).getFrota().get(0)));
-        listaEspera.add(new ListaEspera(locadora.get(1), locadora.get(1).getListaClientes().get(0), locadora.get(1).getFrota().get(2)));
+        Filial filial = (Filial)locadora.getNode(0).getElemento();
+        listaEspera.add(new ListaEspera(filial, filial.getListaClientes().get(0), filial.getFrota().get(1)));
+        listaEspera.add(new ListaEspera(filial, filial.getListaClientes().get(2), filial.getFrota().get(0)));
 
-        listaEspera.add(new ListaEspera(locadora.get(2), locadora.get(2).getListaClientes().get(0), locadora.get(2).getFrota().get(1)));
-        listaEspera.add(new ListaEspera(locadora.get(2), locadora.get(2).getListaClientes().get(1), locadora.get(2).getFrota().get(0)));
+        filial = (Filial)locadora.getNode(1).getElemento();
+        listaEspera.add(new ListaEspera(filial, filial.getListaClientes().get(2), filial.getFrota().get(1)));
+        listaEspera.add(new ListaEspera(filial, filial.getListaClientes().get(1), filial.getFrota().get(0)));
+        listaEspera.add(new ListaEspera(filial, filial.getListaClientes().get(0), filial.getFrota().get(2)));
 
-        listaEspera.add(new ListaEspera(locadora.get(3), locadora.get(3).getListaClientes().get(0), locadora.get(3).getFrota().get(0)));
-        listaEspera.add(new ListaEspera(locadora.get(3), locadora.get(3).getListaClientes().get(1), locadora.get(3).getFrota().get(1)));
+        filial = (Filial)locadora.getNode(2).getElemento();
+        listaEspera.add(new ListaEspera(filial, filial.getListaClientes().get(0), filial.getFrota().get(1)));
+        listaEspera.add(new ListaEspera(filial, filial.getListaClientes().get(1), filial.getFrota().get(0)));
+
+        filial = (Filial)locadora.getNode(3).getElemento();
+        listaEspera.add(new ListaEspera(filial, filial.getListaClientes().get(0), filial.getFrota().get(0)));
+        listaEspera.add(new ListaEspera(filial, filial.getListaClientes().get(1), filial.getFrota().get(1)));
     }
 
     public static void AtenderListaEspera(Queue<ListaEspera> listaEspera, Stack<CarroAlugado> carrosAlugados) {
@@ -234,22 +234,27 @@ public class LocadoraApp  {
             .forEach(c -> System.out.print(c.toString()));
     }
 
-    public static Filial PesquisarFilial(List<Filial> locadora, String nome) {
-        for (Filial f : locadora) {
-            if (f.getNome()==nome)
-                return f;
+    public static Filial PesquisarFilial(ListaEncadeada locadora, String nome) {
+        Node nodeTemp = locadora.getPrimeiro();
+        while (nodeTemp != null) {
+            if (((Filial)nodeTemp.getElemento()).getNome() == nome)
+                return (Filial)nodeTemp.getElemento();
+            nodeTemp = nodeTemp.getProximo();
         }
         return null;
     }
 
     // listar as lojas da locadora...
-    public static void ListarLocadora(List<Filial> locadora) {
+    public static void ListarLocadora(ListaEncadeada locadora) {
        String s = "\n" +
             " _\n" +
             "|_)   _.  ._    _    _´  o   _. \n" +
             "|    (_|  | |  (_|  (/_  |  (_|  RENT A CAR®\n" +
             "─────────────── _|" + "─".repeat(102) + "\n";
-        for (Filial filial : locadora) {
+        
+        Node nodeTemp = locadora.getPrimeiro();
+        while (nodeTemp != null){
+            Filial filial = (Filial)nodeTemp.getElemento();
             s += "\n" + filial.toString() +"\n" + "¨".repeat(120);
             for (Carro carro :  ordenarFrotasPorValorDiaria(filial.getFrota())) {
                 s += carro.toString();
@@ -257,6 +262,7 @@ public class LocadoraApp  {
             for (Cliente cliente : filial.getListaClientes()) {
                 s += cliente.toString();
             }
+            nodeTemp = nodeTemp.getProximo();
         }
         System.out.println(s);
     }
@@ -272,7 +278,7 @@ public class LocadoraApp  {
         try {
             System.out.printf(String.format("%-90s", msg));
             for (int i = 0; i < 10; i++) {
-                Thread.sleep(20);
+                Thread.sleep(50);
                 System.out.print("»");
             }
             System.out.print("  =>  feito!\n");
