@@ -18,7 +18,7 @@ public class Carro implements Comparable<Carro> {
     @Override
     public String toString() {
         String seDisponivel = disponivel ? "SIM" : "NÃO*";
-        return "\nCarro{" +
+        return "\n\t> Carro{" +
                 "placa='" + placa + '\'' +
                 ",\tmarca='" + marca + '\'' +
                 ",\tmodelo='" + modelo + '\'' +
