@@ -4,13 +4,13 @@ public class Cliente {
     private String nome;
     private String telefone;
     private String endereco;
-    private String carroDesejado;
+    private String carroPreferido;
     
-    public Cliente(String nome, String telefone, String endereco, String carroDesejado) {
+    public Cliente(String nome, String telefone, String endereco, String carroPreferido) {
         this.nome = nome;
         this.telefone = telefone;
         this.endereco = endereco;
-        this.carroDesejado = carroDesejado;
+        this.carroPreferido = carroPreferido;
     }
 
     public String getNome() {
@@ -37,13 +37,13 @@ public class Cliente {
         this.endereco = endereco;
     }
 
-    public String getCarroDesejado() {
-        return carroDesejado;
+    public String getCarroPreferido() {
+        return carroPreferido;
     }
 
     @Override
     public String toString() {
-        return "\nCliente [Nome=" + nome + ", endereco=" + endereco + ", telefone=" + telefone + "]";
+        return "\n\t# Cliente [Nome=" + nome + ", endereco=" + endereco + ", telefone=" + telefone + "]";
     }
 
     
