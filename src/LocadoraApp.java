@@ -72,8 +72,15 @@ public class LocadoraApp  {
         System.out.println("\n12) Histórico dos aluguéis:");
         mostrarHistoricoAluguel(historicoAlugados);
 
-        //Listas encadeadas......DUPLA/SIMPLES/CIRCULAR: ?
-        // Usando a ListaSimples. alterando para OBJECT!
+        System.out.println("");
+        System.out.println("\n15) Necessário vender filiais (crise está feia)...:");
+        Pensando("Vendendo a filial: " + ((Filial)locadora.getNode(3).getElemento()).getNome());
+        locadora.remover(locadora.getNode(3).getElemento());
+        Pensando("Vendendo a filial: " + ((Filial)locadora.getNode(2).getElemento()).getNome());
+        locadora.remover(locadora.getNode(2).getElemento());
+
+        System.out.println("\n15) Listando situação atual das frotas, depois da venda das filiais:");
+        ListarLocadora(locadora);
 
     }
 
